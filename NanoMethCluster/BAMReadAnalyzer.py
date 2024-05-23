@@ -102,8 +102,15 @@ def meth_calc_probability(ml_values, total_ml, num_simulations):
         average_occurrences_m = simulate_event_occurrences(C_m, num_simulations)
         return average_occurrences_h, average_occurrences_m
 
+def is_valid_read(read):
+    """Check if the read is valid for analysis."""
+    return read.query_length > 10 and read.has_tag('MM') and read.has_tag('ML')
+
 def process_read(read, k, include_mlbc, total_ml, meth_calc, num_simulations):
     """Process a single read and extract relevant information."""
+    if not is_valid_read(read):
+        return None
+
     read_name = read.query_name
     read_length = read.query_length
     mean_quality = calculate_mean_quality(read.query_qualities)
@@ -152,7 +159,9 @@ def main(bam_file_path, output_file, k, include_mlbc, total_ml, meth_calc, num_s
 
     with ThreadPoolExecutor(max_workers=num_threads) as executor:
         results = executor.map(lambda read: process_read(read, k, include_mlbc, total_ml, meth_calc, num_simulations), bamfile)
-        data.extend(results)
+        for result in results:
+            if result:
+                data.append(result)
 
     columns = ['Read_Name', 'Length', 'Mean_Quality', 'A', 'T', 'G', 'C', 'Num_Pairs']
     if include_mlbc:
