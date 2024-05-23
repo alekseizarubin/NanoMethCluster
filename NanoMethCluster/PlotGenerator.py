@@ -43,10 +43,19 @@ def create_interactive_plots(input_dir, pca_components, tsne_components, umap_co
             kmeans_file = kmeans_file[0]
             kmeans_results = read_gzipped_tsv(os.path.join(input_dir, kmeans_file))
             kmeans_results.fillna(0, inplace=True)
-            kmeans_labels = kmeans_results['Optimal_Cluster'].astype(str)  # Convert to string to treat as categorical
+            kmeans_labels = kmeans_results.astype(str)  # Convert to string to treat as categorical
             additional_data['Cluster'] = kmeans_labels.values
         else:
-            print(f"No K-means clustering results found for {kmeans_clusters} clusters.")
+            kmeans_file = [f for f in os.listdir(input_dir) if f'_all_clusters' in f]
+            if kmeans_clusters:
+                kmeans_file = kmeans_file[0]
+                kmeans_results = read_gzipped_tsv(os.path.join(input_dir, kmeans_file))
+                kmeans_results = kmeans_results.iloc[:,(kmeans_clusters-1)]
+                kmeans_results.fillna(0, inplace=True)
+                kmeans_labels = kmeans_results.astype(str)
+                additional_data['Cluster'] = kmeans_labels.values
+            else:
+                print(f"No K-means clustering results found for {kmeans_clusters} clusters.")
 
     # Reading PCA results
     pca_file = [f for f in os.listdir(input_dir) if 'pca_results' in f]
