@@ -5,6 +5,20 @@
 NanoMethCluster is a Python package designed for the analysis of nanopore sequencing example that includes methylation information. The package includes tools for analyzing BAM files, extracting methylation information, processing k-mer example, general example analysis, and plotting. It provides a command-line interface (CLI) for performing various analyses and creating interactive plots.
 ## Installation
 
+Preparing the environment:
+
+```sh
+pip install pandas numpy pysam joblib matplotlib scikit-learn umap-learn plotly
+```
+
+Or use conda:
+
+```sh
+conda create -n nanomethcluster python=3.10 pandas numpy pysam joblib matplotlib scikit-learn umap-learn plotly
+
+conda activate nanomethcluster
+```
+
 You can install NanoMethCluster using `pip`:
 
 ```sh
