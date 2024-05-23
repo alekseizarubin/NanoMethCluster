@@ -1,6 +1,6 @@
 [project]
 name = "NanoMethCluster"
-version = "0.1.0"
+version = "0.1.1"
 description = "A package for analyzing nanopore sequencing data, focusing on clustering raw reads based on methylation and k-mers."
 authors = [{name = "Zarubin Aleksei", email = "a.a.zarubin@gmail.com"}]
 license = "MIT"
